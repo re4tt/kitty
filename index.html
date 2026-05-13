@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Kitty!<3 </title>
+    <style>
+        :root {
+            --pink: #ff65a3;
+            --light-pink: #ff9ebe;
+            --bg: #0b050c;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--bg);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+      
+        .bg-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            display: block;
+            pointer-events: none;
+            fill: var(--pink);
+            opacity: 0.3;
+            animation: floatUp 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% {
+                transform: translateY(-10vh) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+       
+        .card-container {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            padding: 20px;
+        }
+
+       
+        .title {
+            font-family: 'Georgia', serif;
+            font-size: 3.5rem;
+            font-weight: bold;
+            font-style: italic;
+            color: #ffffff;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            text-shadow: 0 0 10px var(--pink), 0 0 30px var(--pink);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: var(--light-pink);
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(25px);
+            animation: fadeInUp 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.6s;
+            text-shadow: 0 0 15px rgba(255, 158, 190, 0.6);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /*  */
+        .kitty-heart-box {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 40px auto;
+            opacity: 0;
+            animation: fadeInSimple 2s forwards 1.2s;
+        }
+
+        .main-heart {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: var(--pink);
+            transform: rotate(-45deg);
+            top: 30px;
+            left: 20px;
+            animation: heartBeat 1.2s infinite alternate ease-in-out;
+            box-shadow: 0 0 40px rgba(255, 101, 163, 0.7);
+        }
+
+        .main-heart::before, .main-heart::after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-color: var(--pink);
+            border-radius: 50%;
+        }
+        .main-heart::before { top: -40px; left: 0; }
+        .main-heart::after { top: 0; left: 40px; }
+
+        /*  */
+        .ear {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid var(--pink);
+            z-index: 3;
+            animation: earBeat 1.2s infinite alternate ease-in-out;
+        }
+        .ear.left { top: 0; left: 10px; transform: rotate(-15deg); }
+        .ear.right { top: 0; right: 10px; transform: rotate(15deg); }
+
+        @keyframes heartBeat {
+            from { transform: rotate(-45deg) scale(1); }
+            to { transform: rotate(-45deg) scale(1.12); }
+        }
+
+        @keyframes earBeat {
+            from { transform: scale(1); }
+            to { transform: scale(1.12); transform-origin: bottom center; }
+        }
+
+        @keyframes fadeInSimple {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!--  -->
+    <div class="bg-hearts" id="heartsContainer"></div>
+
+    <!--  -->
+    <div class="card-container">
+        <div class="kitty-heart-box">
+            <div class="ear left"></div>
+            <div class="ear right"></div>
+            <div class="main-heart"></div>
+        </div>
+        <h1 class="title">Happy Birthday</h1>
+        <div class="subtitle">my kitty <3</div>
+    </div>
+
+    <script>
+        // 
+        const container = document.getElementById('heartsContainer');
+        const heartCount = 30;
+
+        // 
+        const heartSVG = `
+            <svg viewBox="0 0 32 29.6" width="100%" height="100%">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+        `;
+
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = heartSVG;
+            
+            // 
+            const size = Math.floor(Math.random() * 20) + 10; // от 10 до 30px
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.left = `${Math.random() * 100}vw`;
+            
+            const duration = Math.random() * 4 + 4; // от 4 до 8 секунд
+            heart.style.animationDuration = `${duration}s`;
+            
+            const delay = Math.random() * 6; // задержка старта
+            heart.style.animationDelay = `-${delay}s`;
+
+            container.appendChild(heart);
+        }
+    </script>
+</body>
+</html>
